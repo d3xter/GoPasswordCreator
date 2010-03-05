@@ -13,6 +13,7 @@ and it will generate a binary called "password_creator"
 
 There are several arguments, which can be passed to the Password-Creator:
 
+--all		When this Flag is set, lower/upper-case letters, numbers, special characters and by user defined characters are used to generate the password
 --lower		Lower-Case Letters will be included
 --upper		Upper-Case Letters will be included
 --numbers   Numbers will be included
