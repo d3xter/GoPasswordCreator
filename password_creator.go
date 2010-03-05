@@ -5,7 +5,7 @@ import (
 	"os"
 	"rand"
 	"time"
-	"buffer"
+	"bytes"
 )
 
 var (
@@ -36,7 +36,7 @@ func CreateCharacterArray(lowerCase, upperCase, numbers, specialCharacters bool)
 	}
 }
 
-func CreatePassword(length int) (password string, err os.Error) {
+func GeneratePassword(length int) (password string, err os.Error) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
