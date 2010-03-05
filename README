@@ -1,0 +1,32 @@
+GoPasswordCreator
+
+This program can be used to generate passwords
+
+
+1) Compilation
+
+The easiest way to compile the Password-Creator is, just run "make" 
+and it will generate a binary called "password_creator"
+
+
+2) Arguments
+
+There are several arguments, which can be passed to the Password-Creator:
+
+--lower		Lower-Case Letters will be included
+--upper		Upper-Case Letters will be included
+--numbers   Numbers will be included
+--special	Special Letters (like "-") will be included
+--own		The User can pass a string to the Password-Creator and those characters in the string will be included
+
+
+3) Examples
+
+password_creator --lower --upper --numbers
+This Password could contain lower-case letters, upper-case letters and numbers
+
+password_creator --lower --own "?="
+This password could contain lower-case letters and those two characters ("?" and "="), which the user has passed to the Password-Creator
+
+password_creator --lower=false --upper=true
+This password could contain upper-case letters. Lower-case letters will not be used to generate the password
