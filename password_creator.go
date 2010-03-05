@@ -36,6 +36,10 @@ func CreateCharacterArray(lowerCase, upperCase, numbers, specialCharacters bool)
 	}
 }
 
+func AddUserDefinedCharacters(userCharacters string) {
+	CHARACTERS += userCharacters
+}
+
 func GeneratePassword(length int) (password string, err os.Error) {
 	passwordBuffer := new(bytes.Buffer)
 

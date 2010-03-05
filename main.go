@@ -14,6 +14,7 @@ var (
 	upperCase         = flag.Bool("upper", false, "Should UpperCase characters be included?")
 	numbers           = flag.Bool("numbers", false, "Should the Numbers be included?")
 	specialCharacters = flag.Bool("special", false, "Should special characters be included?")
+	usersCharacters = flag.String("own", "", "Characters defined by the user, which will be also be used to generate the password")
 )
 
 
@@ -21,6 +22,7 @@ func main() {
 	flag.Parse()
 
 	password_creator.CreateCharacterArray(*lowerCase, *upperCase, *numbers, *specialCharacters)
+	password_creator.AddUserDefinedCharacters(*usersCharacters)
 
 	password, error := password_creator.GeneratePassword(*passwordLength)
 
