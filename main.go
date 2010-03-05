@@ -16,7 +16,7 @@ var (
 	specialCharacters = flag.Bool("special", false, "Should special characters be included?")
 	usersCharacters   = flag.String("own", "", "Characters defined by the user, which will be also be used to generate the password")
 
-	//If --all Flag is set, then lower/upper-case letters, numbers and special characters are used
+	//If --all Flag is set, then lower/upper-case letters, numbers and special characters and by user defined characters are used
 	allGroups = flag.Bool("all", false, "Use lower/upper-case letters, numbers, special characters and by user defined characters to generate the password")
 )
 
