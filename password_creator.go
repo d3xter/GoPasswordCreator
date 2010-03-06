@@ -2,7 +2,6 @@ package password_creator
 
 import (
 	"strings"
-	"os"
 	"rand"
 	"time"
 	"bytes"
@@ -46,14 +45,14 @@ func AddUserDefinedCharacters(userCharacters string) {
 //Returns a bool, which describes if there are enough characters to generate a password
 func EnoughCharacters() bool { return len(CHARACTERS) > 1 }
 
-func GeneratePassword(length int) (password string, err os.Error) {
+func GeneratePassword(length int, output chan<- string) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
 	rand.Seed(time.Nanoseconds())
 
 	if !EnoughCharacters() {
-		return "", os.NewError(NOTENOUGHCHARACTERS)
+		output <- NOTENOUGHCHARACTERS
 	}
 
 	for i := 0; i < length; i++ {
@@ -63,6 +62,6 @@ func GeneratePassword(length int) (password string, err os.Error) {
 		passwordBuffer.WriteString(string(char))
 	}
 
-	return passwordBuffer.String(), nil
+	output <- passwordBuffer.String()
 }
 

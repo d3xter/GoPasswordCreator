@@ -38,16 +38,13 @@ func main() {
 	if password_creator.EnoughCharacters() {
 		fmt.Println("Your password(s):")
 
-		for i := 0; i < *passwordsCount; i++ {
-			password, error := password_creator.GeneratePassword(*passwordLength)
+		passwords := make(chan string)
 
-			if error == nil {
-				//Everything went well
-				fmt.Println(password)
-			} else {
-				fmt.Println("Error: ", error.String())
-			}
+		for i := 0; i < *passwordsCount; i++ {
+			go password_creator.GeneratePassword(*passwordLength, passwords)
+			fmt.Println(<-passwords)
 		}
+
 	} else {
 		fmt.Println(password_creator.NOTENOUGHCHARACTERS)
 	}
