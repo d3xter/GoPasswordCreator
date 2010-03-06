@@ -15,6 +15,9 @@ var (
 
 	//Characters will store the selected characters, which will be used to generate the password
 	CHARACTERS string
+
+	//Error Message
+	NOTENOUGHCHARACTERS = "Not enough Characters specified to generate a password"
 )
 
 func CreateCharacterArray(lowerCase, upperCase, numbers, specialCharacters bool) {
@@ -40,14 +43,17 @@ func AddUserDefinedCharacters(userCharacters string) {
 	CHARACTERS += userCharacters
 }
 
+//Returns a bool, which describes if there are enough characters to generate a password
+func EnoughCharacters() bool { return len(CHARACTERS) > 1 }
+
 func GeneratePassword(length int) (password string, err os.Error) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
-	rand.Seed(time.Seconds())
+	rand.Seed(time.Nanoseconds())
 
-	if len(CHARACTERS) <= 1 {
-		return "", os.NewError("Not enough Characters specified to generate a password")
+	if !EnoughCharacters() {
+		return "", os.NewError(NOTENOUGHCHARACTERS)
 	}
 
 	for i := 0; i < length; i++ {

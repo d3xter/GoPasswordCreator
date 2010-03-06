@@ -23,6 +23,7 @@ There are several arguments, which can be passed to the Password-Creator:
 --special	Special Letters (like "-") will be included
 --own		The User can pass a string to the Password-Creator and those characters in the string will be included
 --length 	Specifies the length of the generated password. Default is set to 8
+--count		User can specify with --count, how many passwords should be generated at the same. Default is set to 1
 
 
 3) Examples
