@@ -45,7 +45,7 @@ func AddUserDefinedCharacters(userCharacters string) {
 //Returns a bool, which describes if there are enough characters to generate a password
 func EnoughCharacters() bool { return len(CHARACTERS) > 1 }
 
-func GeneratePassword(length int, output chan<- string) {
+func GeneratePassword(length, count int, quit chan<- bool, output chan<- string) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
@@ -55,13 +55,19 @@ func GeneratePassword(length int, output chan<- string) {
 		output <- NOTENOUGHCHARACTERS
 	}
 
-	for i := 0; i < length; i++ {
-		char := CHARACTERS[rand.Intn(len(CHARACTERS))]
+	for i := 0; i < count; i++ {
+		passwordBuffer.Reset()
+		
+		for j := 0; j < length; j++ {
+			char := CHARACTERS[rand.Intn(len(CHARACTERS))]
 
-		//Append the character at the end of the password
-		passwordBuffer.WriteString(string(char))
+			//Append the character at the end of the password
+			passwordBuffer.WriteString(string(char))
+		}
+
+		output <- passwordBuffer.String()
 	}
 
-	output <- passwordBuffer.String()
+	quit <- true
 }
 

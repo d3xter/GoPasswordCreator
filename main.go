@@ -20,7 +20,7 @@ var (
 	allGroups = flag.Bool("all", false, "Use lower/upper-case letters, numbers, special characters and by user defined characters to generate the password")
 
 	//The user can determine, how many passwords will be created
-	passwordsCount = flag.Int("count", 1, "Determine, how many passwords will be created")
+	passwordCount = flag.Int("count", 1, "Determine, how many passwords will be created")
 )
 
 
@@ -39,10 +39,19 @@ func main() {
 		fmt.Println("Your password(s):")
 
 		passwords := make(chan string)
+		quit := make(chan bool)
 
-		for i := 0; i < *passwordsCount; i++ {
-			go password_creator.GeneratePassword(*passwordLength, passwords)
-			fmt.Println(<-passwords)
+		go password_creator.GeneratePassword(*passwordLength, *passwordCount, quit, passwords)
+
+		for {
+			//Print all passwords, which are sent through "passwords" or quit, when the goroutine has declared, that its done
+			select {
+			case pw := <-passwords:
+				fmt.Println(pw)
+
+			case <-quit:
+				return
+			}
 		}
 
 	} else {
