@@ -24,7 +24,7 @@ var (
 	//Define all available flags, which are used to specify, which characters to use to generate the password
 	lowerCase         = flag.Bool("lower", false, "Should LowerCase characters be included?")
 	upperCase         = flag.Bool("upper", false, "Should UpperCase characters be included?")
-	numbers           = flag.Bool("numbers", false, "Should the Numbers be included?")
+	numerals           = flag.Bool("numbers", false, "Should the Numbers be included?")
 	specialCharacters = flag.Bool("special", false, "Should special characters be included?")
 	usersCharacters   = flag.String("own", "", "Characters defined by the user, which will be also be used to generate the password")
 
@@ -42,11 +42,11 @@ func main() {
 	if *allGroups {
 		*lowerCase = true
 		*upperCase = true
-		*numbers = true
+		*numerals = true
 		*specialCharacters = true
 	}
 
-	creator, err := passwordcreator.NewCreator(*lowerCase, *upperCase, *numbers, *specialCharacters, *usersCharacters)
+	creator, err := passwordcreator.NewCreator(*lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
 
 	if err == nil {
 		fmt.Println("Your password(s):")

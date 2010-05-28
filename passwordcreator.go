@@ -30,7 +30,7 @@ const (
 	special = ",.-"
 )
 
-func NewCreator(lowerCase, upperCase, numbers, specialCharacters bool, userCharacters string) (creator *Creator, err os.Error) {
+func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userCharacters string) (creator *Creator, err os.Error) {
 	characters := ""
 
 	if lowerCase {
@@ -41,7 +41,7 @@ func NewCreator(lowerCase, upperCase, numbers, specialCharacters bool, userChara
 		characters += strings.ToUpper(letters)
 	}
 
-	if numbers {
+	if numerals {
 		characters += numbers
 	}
 
