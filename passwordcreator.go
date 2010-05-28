@@ -32,7 +32,7 @@ const (
 
 func NewCreator(lowerCase, upperCase, numbers, specialCharacters bool, userCharacters string) (creator *Creator, err os.Error) {
 	characters := ""
-	
+
 	if lowerCase {
 		characters += LETTERS
 	}
@@ -53,12 +53,13 @@ func NewCreator(lowerCase, upperCase, numbers, specialCharacters bool, userChara
 
 	if len(characters) <= 1 {
 		err = os.NewError("Not enough Characters specified to generate passwords")
+		return nil, err
 	}
 
 	return &Creator{characters}, err
 }
 
-func (creator *Creator) CreatePassword(length int) (password string, err os.Error) {
+func (creator *Creator) CreatePassword(length int) string {
 	passwordBuffer := new(bytes.Buffer)
 
 	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
@@ -73,6 +74,6 @@ func (creator *Creator) CreatePassword(length int) (password string, err os.Erro
 		passwordBuffer.WriteString(string(char))
 	}
 
-	return passwordBuffer.String(), err
+	return passwordBuffer.String()
 }
 

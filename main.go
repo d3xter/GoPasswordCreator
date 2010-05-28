@@ -52,13 +52,9 @@ func main() {
 		fmt.Println("Your password(s):")
 
 		for i := 0; i < *passwordCount; i++ {
-			password, createErr := creator.CreatePassword(*passwordLength)
+			password := creator.CreatePassword(*passwordLength)
 
-			if createErr == nil {
-				fmt.Println(password)
-			} else {
-				fmt.Println(createErr)
-			}
+			fmt.Println(password)
 		}
 	} else {
 		fmt.Println(err)
