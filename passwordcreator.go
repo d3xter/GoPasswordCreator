@@ -25,28 +25,28 @@ type Creator struct {
 }
 
 const (
-	LETTERS = "abcdefghijklmnopqrstuvwxyz"
-	NUMBERS = "0123456789"
-	SPECIAL = ",.-"
+	letters = "abcdefghijklmnopqrstuvwxyz"
+	numbers = "0123456789"
+	special = ",.-"
 )
 
 func NewCreator(lowerCase, upperCase, numbers, specialCharacters bool, userCharacters string) (creator *Creator, err os.Error) {
 	characters := ""
 
 	if lowerCase {
-		characters += LETTERS
+		characters += letters
 	}
 
 	if upperCase {
-		characters += strings.ToUpper(LETTERS)
+		characters += strings.ToUpper(letters)
 	}
 
 	if numbers {
-		characters += NUMBERS
+		characters += numbers
 	}
 
 	if specialCharacters {
-		characters += SPECIAL
+		characters += special
 	}
 
 	characters += userCharacters
