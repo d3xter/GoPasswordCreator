@@ -4,7 +4,7 @@ This file is part of GoPasswordCreator.
 
 GoPasswordCreator is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; only version 2 of the License.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
@@ -40,34 +40,28 @@ func main() {
 	flag.Parse()
 
 	if *allGroups {
-		passwordcreator.CreateCharacterArray(true, true, true, true)
-	} else {
-		passwordcreator.CreateCharacterArray(*lowerCase, *upperCase, *numbers, *specialCharacters)
+		*lowerCase = true
+		*upperCase = true
+		*numbers = true
+		*specialCharacters = true
 	}
 
-	passwordcreator.AddUserDefinedCharacters(*usersCharacters)
+	creator, err := passwordcreator.NewCreator(*lowerCase, *upperCase, *numbers, *specialCharacters, *usersCharacters)
 
-	if passwordcreator.EnoughCharacters() {
+	if err == nil {
 		fmt.Println("Your password(s):")
 
-		passwords := make(chan string)
-		quit := make(chan bool)
+		for i := 0; i < *passwordCount; i++ {
+			password, createErr := creator.CreatePassword(*passwordLength)
 
-		go passwordcreator.GeneratePassword(*passwordLength, *passwordCount, quit, passwords)
-
-		for {
-			//Print all passwords, which are sent through "passwords" or quit, when the goroutine has declared, that its done
-			select {
-			case pw := <-passwords:
-				fmt.Println(pw)
-
-			case <-quit:
-				return
+			if createErr == nil {
+				fmt.Println(password)
+			} else {
+				fmt.Println(createErr)
 			}
 		}
-
 	} else {
-		fmt.Println(passwordcreator.NOTENOUGHCHARACTERS)
+		fmt.Println(err)
 	}
 }
 
