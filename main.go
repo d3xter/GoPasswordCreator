@@ -14,7 +14,7 @@ package main
 
 import (
 	"fmt"
-	"./password_creator"
+	"./passwordcreator"
 	"flag"
 )
 
@@ -40,20 +40,20 @@ func main() {
 	flag.Parse()
 
 	if *allGroups {
-		password_creator.CreateCharacterArray(true, true, true, true)
+		passwordcreator.CreateCharacterArray(true, true, true, true)
 	} else {
-		password_creator.CreateCharacterArray(*lowerCase, *upperCase, *numbers, *specialCharacters)
+		passwordcreator.CreateCharacterArray(*lowerCase, *upperCase, *numbers, *specialCharacters)
 	}
 
-	password_creator.AddUserDefinedCharacters(*usersCharacters)
+	passwordcreator.AddUserDefinedCharacters(*usersCharacters)
 
-	if password_creator.EnoughCharacters() {
+	if passwordcreator.EnoughCharacters() {
 		fmt.Println("Your password(s):")
 
 		passwords := make(chan string)
 		quit := make(chan bool)
 
-		go password_creator.GeneratePassword(*passwordLength, *passwordCount, quit, passwords)
+		go passwordcreator.GeneratePassword(*passwordLength, *passwordCount, quit, passwords)
 
 		for {
 			//Print all passwords, which are sent through "passwords" or quit, when the goroutine has declared, that its done
@@ -67,7 +67,7 @@ func main() {
 		}
 
 	} else {
-		fmt.Println(password_creator.NOTENOUGHCHARACTERS)
+		fmt.Println(passwordcreator.NOTENOUGHCHARACTERS)
 	}
 }
 

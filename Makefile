@@ -1,9 +1,9 @@
 include $(GOROOT)/src/Make.$(GOARCH)
 
-TARG=password_creator
+TARG=passwordcreator
 
-all : main.go password_creator.go
-	$(GC) password_creator.go
+all : main.go passwordcreator.go
+	$(GC) passwordcreator.go
 	$(GC) main.go
 	$(LD) -o $(TARG) main.$O
 
