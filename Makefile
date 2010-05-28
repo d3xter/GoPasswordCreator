@@ -9,4 +9,4 @@ all : main.go passwordcreator.go
 
 
 clean:
-	rm *.6
+	rm *.[568vq]
