@@ -14,8 +14,7 @@ package passwordcreator
 
 import (
 	"strings"
-	"rand"
-	"time"
+	"crypto/rand"
 	"bytes"
 	"os"
 )
@@ -62,13 +61,13 @@ func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userChar
 func (creator *Creator) CreatePassword(length int) string {
 	passwordBuffer := new(bytes.Buffer)
 
-	//For now, we use the actual time to set the seed, otherwise the password would be the same all the time
-	rand.Seed(time.Nanoseconds())
-
-	passwordBuffer.Reset()
+	//Create a byte-array and fill it with random bytes
+	randbytes := make([]byte, length)
+	rand.Read(randbytes)
 
 	for j := 0; j < length; j++ {
-		char := creator.characters[rand.Intn(len(creator.characters))]
+		tmpindex := int(randbytes[j]) % len(creator.characters)
+		char := creator.characters[tmpindex]
 
 		//Append the character at the end of the password
 		passwordBuffer.WriteString(string(char))
