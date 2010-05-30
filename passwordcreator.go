@@ -58,21 +58,23 @@ func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userChar
 	return &Creator{characters}, err
 }
 
-func (creator *Creator) CreatePassword(length int) string {
+func (creator *Creator) CreatePassword(length int) (password string, err os.Error) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//Create a byte-array and fill it with random bytes
 	randbytes := make([]byte, length)
-	rand.Read(randbytes)
+	if _, err := rand.Read(randbytes); err == nil {
 
-	for j := 0; j < length; j++ {
-		tmpindex := int(randbytes[j]) % len(creator.characters)
-		char := creator.characters[tmpindex]
+		for j := 0; j < length; j++ {
+			tmpindex := int(randbytes[j]) % len(creator.characters)
+			char := creator.characters[tmpindex]
 
-		//Append the character at the end of the password
-		passwordBuffer.WriteString(string(char))
-	}
+			//Append the character at the end of the password
+			passwordBuffer.WriteString(string(char))
+		}
 
-	return passwordBuffer.String()
+		return passwordBuffer.String(), nil
+	} 
+	
+	return "", err
 }
-
