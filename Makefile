@@ -2,11 +2,9 @@ include $(GOROOT)/src/Make.inc
 
 TARG=passwordcreator
 
-all : main.go passwordcreator.go
-	$(GC) passwordcreator.go
-	$(GC) main.go
-	$(LD) -o $(TARG) main.$O
+GOFILES=\
+	passwordcreator.go\
+	main.go\
+	
 
-
-clean:
-	rm *.[568vq]
+include $(GOROOT)/src/Make.pkg
