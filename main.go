@@ -14,7 +14,6 @@ package main
 
 import (
 	"fmt"
-	"./passwordcreator"
 	"flag"
 )
 
@@ -46,7 +45,7 @@ func main() {
 		*specialCharacters = true
 	}
 
-	creator, err := passwordcreator.NewCreator(*lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
+	creator, err := NewCreator(*lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
 
 	if err == nil {
 		fmt.Println("Your password(s):")
