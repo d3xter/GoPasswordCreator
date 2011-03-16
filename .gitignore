@@ -1,3 +1,5 @@
-*.6
-*.out
+*.o 
+*.a 
+*.[568vq] 
+[568vq].out
 passwordcreator
