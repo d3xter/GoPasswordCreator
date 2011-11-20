@@ -15,6 +15,7 @@ package main
 import (
 	"fmt"
 	"flag"
+	"os"
 )
 
 var (
@@ -32,6 +33,10 @@ var (
 
 	//The user can determine, how many passwords will be created
 	passwordCount = flag.Int("count", 1, "Determine, how many passwords will be created")
+
+	//The user can define a file, where the passwords will be written into
+	//If file is omitted, then it will print the passwords on Stdout
+	file = flag.String("file", "", "The File, where the passwords should be written into")
 )
 
 
@@ -45,19 +50,32 @@ func main() {
 		*specialCharacters = true
 	}
 
-	creator, err := NewCreator(*lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
+	var output *os.File
+	var fileErr error
 
-	if err == nil {
-		fmt.Println("Your password(s):")
-
-		for i := 0; i < *passwordCount; i++ {
-			if password, createErr := creator.CreatePassword(*passwordLength); createErr == nil {
-				fmt.Println(password)
-			} else {
-				fmt.Println(createErr)
-			}
+	if *file != "" {
+		if output, fileErr = os.Create(*file); fileErr != nil {
+			printError(fileErr)
+			output = os.Stdout
 		}
 	} else {
-		fmt.Println(err)
+		output = os.Stdout
 	}
+
+	creator, err := NewCreator(output, *lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
+	defer creator.CloseOutputFile()
+
+	if err != nil {
+		printError(err)
+	} else {
+		writeErr := creator.WritePasswords(*passwordLength, *passwordCount)
+
+		if writeErr != nil  {
+			printError(writeErr)
+		}
+	}
+}
+
+func printError(err error) {
+	fmt.Println("Error: " + err.Error())
 }

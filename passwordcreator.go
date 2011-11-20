@@ -17,10 +17,12 @@ import (
 	"crypto/rand"
 	"bytes"
 	"errors"
+	"os"
 )
 
 type Creator struct {
 	characters string
+	file *os.File
 }
 
 const (
@@ -29,7 +31,11 @@ const (
 	special = ",.-"
 )
 
-func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userCharacters string) (creator *Creator, err error) {
+func NewCreator(file *os.File, lowerCase, upperCase, numerals, specialCharacters bool, userCharacters string) (creator *Creator, err error) {
+	if file == nil {
+		return nil, errors.New("File is nil!")
+	}
+
 	characters := ""
 
 	if lowerCase {
@@ -55,10 +61,10 @@ func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userChar
 		return nil, err
 	}
 
-	return &Creator{characters}, err
+	return &Creator{characters, file}, err
 }
 
-func (creator *Creator) CreatePassword(length int) (password string, err error) {
+func (creator *Creator) CreatePassword(length int) (password []byte, err error) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//Create a byte-array and fill it with random bytes
@@ -73,8 +79,26 @@ func (creator *Creator) CreatePassword(length int) (password string, err error) 
 			passwordBuffer.WriteString(string(char))
 		}
 
-		return passwordBuffer.String(), nil
+		return passwordBuffer.Bytes(), nil
 	}
 
-	return "", err
+	return nil, err
+}
+
+func (creator *Creator) WritePasswords(length, count int) error {
+	for i := 0; i < count; i++ {
+		if pass, err := creator.CreatePassword(length); err == nil {
+			creator.file.Write(append(pass, byte('\n')))
+		} else {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (creator *Creator) CloseOutputFile() {
+	if creator.file != nil {
+		creator.file.Close()
+	}
 }
