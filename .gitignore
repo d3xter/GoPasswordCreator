@@ -2,5 +2,5 @@
 *.a 
 *.[568vq] 
 [568vq].out
-_go_.6
+_*
 passwordcreator
