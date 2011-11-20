@@ -2,10 +2,11 @@ package main
 
 import (
 	"testing"
+	"os"
 )
 
 func TestDigitsCharset(t *testing.T) {
-	c, e := NewCreator(false, false, true, false, "")
+	c, e := NewCreator(os.Stdout, false, false, true, false, "")
 
 	testDigits := "0123456789"
 	if e != nil || c.characters != testDigits {
@@ -14,7 +15,7 @@ func TestDigitsCharset(t *testing.T) {
 }
 
 func TestSomeChars(t *testing.T) {
-	c, err := NewCreator(true, false, true, false, ",.-_")
+	c, err := NewCreator(os.Stdout, true, false, true, false, ",.-_")
 
 	testCharacters := "abcdefghijklmnopqrstuvwxyz0123456789,.-_"
 
