@@ -16,7 +16,7 @@ import (
 	"strings"
 	"crypto/rand"
 	"bytes"
-	"os"
+	"errors"
 )
 
 type Creator struct {
@@ -29,7 +29,7 @@ const (
 	special = ",.-"
 )
 
-func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userCharacters string) (creator *Creator, err os.Error) {
+func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userCharacters string) (creator *Creator, err error) {
 	characters := ""
 
 	if lowerCase {
@@ -51,14 +51,14 @@ func NewCreator(lowerCase, upperCase, numerals, specialCharacters bool, userChar
 	characters += userCharacters
 
 	if len(characters) <= 1 {
-		err = os.NewError("Not enough Characters specified to generate passwords")
+		err = errors.New("Not enough Characters specified to generate passwords")
 		return nil, err
 	}
 
 	return &Creator{characters}, err
 }
 
-func (creator *Creator) CreatePassword(length int) (password string, err os.Error) {
+func (creator *Creator) CreatePassword(length int) (password string, err error) {
 	passwordBuffer := new(bytes.Buffer)
 
 	//Create a byte-array and fill it with random bytes
@@ -74,7 +74,7 @@ func (creator *Creator) CreatePassword(length int) (password string, err os.Erro
 		}
 
 		return passwordBuffer.String(), nil
-	} 
-	
+	}
+
 	return "", err
 }
