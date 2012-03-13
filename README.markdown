@@ -19,15 +19,15 @@ Arguments
 
 There are several arguments, which can be passed to the Password-Creator:
 
---all		When this Flag is set, lower/upper-case letters, numbers, special characters and by user defined characters are used to generate the password
---lower		Lower-Case Letters will be included
---upper		Upper-Case Letters will be included
---numbers   	Numbers will be included
---special	Special Letters (like "-") will be included
---own		The User can pass a string to the Password-Creator and those characters in the string will be included
---length 	Specifies the length of the generated password. Default is set to 8
---count		User can specify with --count, how many passwords should be generated at the same. Default is set to 1
---file		If file is set, the passwords will be written into this file, rather than printed out on stdout
+- --all		When this Flag is set, lower/upper-case letters, numbers, special characters and by user defined characters are used to generate the password
+- --lower	Lower-Case Letters will be included
+- --upper	Upper-Case Letters will be included
+- --numbers   	Numbers will be included
+- --special	Special Letters (like "-") will be included
+- --own		The User can pass a string to the Password-Creator and those characters in the string will be included
+- --length 	Specifies the length of the generated password. Default is set to 8
+- --count	User can specify with --count, how many passwords should be generated at the same. Default is set to 1
+- --file	If file is set, the passwords will be written into this file, rather than printed out on stdout
 
 
 Examples
