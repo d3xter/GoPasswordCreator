@@ -8,8 +8,8 @@ It is also possible for the user to define his/her own set of characters, which 
 
 1) Compilation
 
-The easiest way to compile the Password-Creator is, just run "make" 
-and it will generate a binary called "password_creator"
+The easiest way to compile the Password-Creator is, just to use the new "go" tool and run "go build" 
+and it will generate a binary called "GoPasswordCreator"
 
 
 2) Arguments
