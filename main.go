@@ -63,7 +63,7 @@ func main() {
 	}
 
 	creator, err := NewCreator(output, *lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
-	defer creator.CloseOutputFile()
+	defer output.Close()
 
 	if err != nil {
 		printError(err)
