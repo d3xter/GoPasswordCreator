@@ -96,9 +96,3 @@ func (creator *Creator) WritePasswords(length, count int) error {
 
 	return nil
 }
-
-func (creator *Creator) CloseOutputFile() {
-	if creator.file != nil {
-		creator.file.Close()
-	}
-}
