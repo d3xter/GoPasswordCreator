@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"flag"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -49,6 +50,7 @@ func usage() {
   numbers: Use digits
   special: Use special characters
   own: Characters defined by the user which will be also be used to generate the password
+'all', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
 Options:
 `,
 		command, command)
@@ -65,28 +67,41 @@ func main() {
 		// Separate the subcommand from the value
 		parsed := strings.SplitN(arg, "=", 2)
 
-		switch parsed[0] {
-		case "all":
-			lowerCase = true
-			upperCase = true
-			numerals = true
-			specialCharacters = true
-		case "lower":
-			lowerCase = true
-		case "upper":
-			upperCase = true
-		case "numbers":
-			numerals = true
-		case "special":
-			specialCharacters = true
-		case "own":
+		// Group arguments by the data type of their value
+		if parsed[0] == "own" {
+			// Need a string value
 			if len(parsed) == 2 {
 				usersCharacters = parsed[1]
 			} else {
 				printError(fmt.Errorf("'own' requires a '=' to specify characters"))
 			}
-		default:
-			printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
+		} else {
+			// All other arguments take boolean values
+			on := true
+			if len(parsed) == 2 {
+				var err error
+				on, err = strconv.ParseBool(parsed[1])
+				if err != nil {
+					printError(err)
+				}
+			}
+			switch parsed[0] {
+			case "all":
+				lowerCase = on
+				upperCase = on
+				numerals = on
+				specialCharacters = on
+			case "lower":
+				lowerCase = on
+			case "upper":
+				upperCase = on
+			case "numbers":
+				numerals = on
+			case "special":
+				specialCharacters = on
+			default:
+				printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
+			}
 		}
 	}
 
