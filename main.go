@@ -117,5 +117,5 @@ func main() {
 }
 
 func printError(err error) {
-	fmt.Println("Error: " + err.Error())
+	fmt.Fprintln(os.Stderr, "Error: " + err.Error())
 }
