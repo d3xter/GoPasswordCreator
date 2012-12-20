@@ -16,20 +16,18 @@ import (
 	"fmt"
 	"flag"
 	"os"
+	"strings"
 )
 
 var (
 	passwordLength = flag.Int("length", 8, "Length of the generated Password")
 
-	//Define all available flags which are used to specify which characters to use to generate the password
-	lowerCase         = flag.Bool("lower", false, "Should LowerCase characters be included?")
-	upperCase         = flag.Bool("upper", false, "Should UpperCase characters be included?")
-	numerals          = flag.Bool("numbers", false, "Should the Numbers be included?")
-	specialCharacters = flag.Bool("special", false, "Should special characters be included?")
-	usersCharacters   = flag.String("own", "", "Characters defined by the user which will be also be used to generate the password")
-
-	//If --all Flag is set, then lower/upper-case letters, numbers, special characters, and user defined characters are used
-	allGroups = flag.Bool("all", false, "Use lower/upper-case letters, numbers, special characters, and user defined characters to generate the password")
+	// Variables that define what characters to use in the password
+	lowerCase bool
+	upperCase bool
+	numerals bool
+	specialCharacters bool
+	usersCharacters string
 
 	//The user can determine how many passwords will be created
 	passwordCount = flag.Int("count", 1, "Determine how many passwords will be created")
@@ -40,14 +38,56 @@ var (
 )
 
 
+func usage() {
+	command := os.Args[0]
+  fmt.Fprintf(os.Stderr,
+		`Usage: %s [all] [lower] [upper] [numbers] [special] [own=CHARACTERS]
+%s requires at least one of the following commands:
+  all: Use lower/upper-case letters, numbers, special characters, and user defined characters to generate the password
+  lower: Use lower-case letters
+  upper: Use upper-case letters
+  numbers: Use digits
+  special: Use special characters
+  own: Characters defined by the user which will be also be used to generate the password
+Options:
+`,
+		command, command)
+  flag.PrintDefaults()
+}
+
+
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 
-	if *allGroups {
-		*lowerCase = true
-		*upperCase = true
-		*numerals = true
-		*specialCharacters = true
+	for _, arg := range flag.Args() {
+
+		// Separate the subcommand from the value
+		parsed := strings.SplitN(arg, "=", 2)
+
+		switch parsed[0] {
+		case "all":
+			lowerCase = true
+			upperCase = true
+			numerals = true
+			specialCharacters = true
+		case "lower":
+			lowerCase = true
+		case "upper":
+			upperCase = true
+		case "numbers":
+			numerals = true
+		case "special":
+			specialCharacters = true
+		case "own":
+			if len(parsed) == 2 {
+				usersCharacters = parsed[1]
+			} else {
+				printError(fmt.Errorf("'own' requires a '=' to specify characters"))
+			}
+		default:
+			printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
+		}
 	}
 
 	var output *os.File
@@ -62,7 +102,7 @@ func main() {
 		output = os.Stdout
 	}
 
-	creator, err := NewCreator(output, *lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
+	creator, err := NewCreator(output, lowerCase, upperCase, numerals, specialCharacters, usersCharacters)
 	defer output.Close()
 
 	if err != nil {
