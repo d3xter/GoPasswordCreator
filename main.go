@@ -93,9 +93,9 @@ func main() {
 				numerals = on
 				specialCharacters = on
                         case "alphanum":
-				lowercase = on
-				uppercase = on
-				numerials = on
+				lowerCase = on
+				upperCase = on
+				numerals = on
 			case "lower":
 				lowerCase = on
 			case "upper":
