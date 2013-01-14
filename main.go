@@ -9,12 +9,11 @@ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
-
 package main
 
 import (
-	"fmt"
 	"flag"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -24,11 +23,11 @@ var (
 	passwordLength = flag.Int("length", 8, "Length of the generated Password")
 
 	// Variables that define what characters to use in the password
-	lowerCase bool
-	upperCase bool
-	numerals bool
+	lowerCase         bool
+	upperCase         bool
+	numerals          bool
 	specialCharacters bool
-	usersCharacters string
+	usersCharacters   string
 
 	//The user can determine how many passwords will be created
 	passwordCount = flag.Int("count", 1, "Determine how many passwords will be created")
@@ -38,10 +37,9 @@ var (
 	file = flag.String("file", "", "The File where the passwords should be written into")
 )
 
-
 func usage() {
 	command := os.Args[0]
-  fmt.Fprintf(os.Stderr,
+	fmt.Fprintf(os.Stderr,
 		`Usage: %s [all] [lower] [upper] [numbers] [special] [own=CHARACTERS]
 %s requires at least one of the following commands:
   all: Use lower/upper-case letters, numbers, special characters, and user defined characters to generate the password
@@ -55,9 +53,8 @@ func usage() {
 Options:
 `,
 		command, command)
-  flag.PrintDefaults()
+	flag.PrintDefaults()
 }
-
 
 func main() {
 	flag.Usage = usage
@@ -92,7 +89,7 @@ func main() {
 				upperCase = on
 				numerals = on
 				specialCharacters = on
-                        case "alphanum":
+			case "alphanum":
 				lowerCase = on
 				upperCase = on
 				numerals = on
@@ -130,12 +127,12 @@ func main() {
 	} else {
 		writeErr := creator.WritePasswords(*passwordLength, *passwordCount)
 
-		if writeErr != nil  {
+		if writeErr != nil {
 			printError(writeErr)
 		}
 	}
 }
 
 func printError(err error) {
-	fmt.Fprintln(os.Stderr, "Error: " + err.Error())
+	fmt.Fprintln(os.Stderr, "Error: "+err.Error())
 }
