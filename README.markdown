@@ -20,6 +20,7 @@ Arguments
 At least one of these arguments must be passed to GoPasswordCreator:
 
 - **all**	When this Flag is set, lower/upper-case letters, numbers, special characters and user defined characters are used to generate the password
+- **alphanum**  When this flag is set, lower/upper-case letters, numbers, and user defined characters are used to generate the password
 - **lower**	Lower-Case Letters will be included
 - **upper**	Upper-Case Letters will be included
 - **numbers**	Numbers will be included
