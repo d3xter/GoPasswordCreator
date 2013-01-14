@@ -51,7 +51,7 @@ func usage() {
   numbers: Use digits
   special: Use special characters
   own: Characters defined by the user which will be also be used to generate the password
-'all', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
+'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
 Options:
 `,
 		command, command)
