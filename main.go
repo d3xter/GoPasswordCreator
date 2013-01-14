@@ -45,6 +45,7 @@ func usage() {
 		`Usage: %s [all] [lower] [upper] [numbers] [special] [own=CHARACTERS]
 %s requires at least one of the following commands:
   all: Use lower/upper-case letters, numbers, special characters, and user defined characters to generate the password
+  alphanum: Use lower/upper-case letters, numbers, and user defined characters to generate the password
   lower: Use lower-case letters
   upper: Use upper-case letters
   numbers: Use digits
@@ -91,6 +92,10 @@ func main() {
 				upperCase = on
 				numerals = on
 				specialCharacters = on
+                        case "alphanum":
+				lowercase = on
+				uppercase = on
+				numerials = on
 			case "lower":
 				lowerCase = on
 			case "upper":
