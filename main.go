@@ -29,27 +29,26 @@ var (
 	specialCharacters bool
 	usersCharacters   string
 
-	//The user can determine how many passwords will be created
-	passwordCount = flag.Int("count", 1, "Determine how many passwords will be created")
+	passwordCount = flag.Int("count", 1, "Determine how many passwords to create")
 
-	//The user can define a file where the passwords will be written into.
-	//If file is omitted, then it will print the passwords on Stdout.
-	file = flag.String("file", "", "The File where the passwords should be written into")
+	file = flag.String("file", "", "Write passwords to the named file instead of standard output")
 )
 
 func usage() {
 	command := os.Args[0]
 	fmt.Fprintf(os.Stderr,
-		`Usage: %s [all] [lower] [upper] [numbers] [special] [own=CHARACTERS]
-%s requires at least one of the following commands:
-  all: Use lower/upper-case letters, numbers, special characters, and user defined characters to generate the password
-  alphanum: Use lower/upper-case letters, numbers, and user defined characters to generate the password
+		`Usage: %s [all] [alphanum] [lower] [upper] [numbers] [special] [own=CHARACTERS]
+%s requires at least one of the following subcommands to specify what characters
+may be used in the password:
+  all: Equivalent to 'alphanum special'
+  alphanum: Equivalent to 'lower upper numbers'
   lower: Use lower-case letters
   upper: Use upper-case letters
   numbers: Use digits
   special: Use special characters
-  own: Characters defined by the user which will be also be used to generate the password
-'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
+  own: Specifies a custom set of characters to use
+'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by
+'=f' to nullify that character set.
 Options:
 `,
 		command, command)

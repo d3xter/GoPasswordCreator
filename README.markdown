@@ -17,23 +17,23 @@ and it will generate a binary called "GoPasswordCreator"
 Arguments
 =========
 
-At least one of these arguments must be passed to GoPasswordCreator:
+At least one of these arguments must be passed to GoPasswordCreator to specify what characters may be used in the password:
 
-- **all**	When this Flag is set, lower/upper-case letters, numbers, special characters and user defined characters are used to generate the password
-- **alphanum**  When this flag is set, lower/upper-case letters, numbers, and user defined characters are used to generate the password
-- **lower**	Lower-Case Letters will be included
-- **upper**	Upper-Case Letters will be included
-- **numbers**	Numbers will be included
-- **special**	Special Letters (like "-") will be included
-- **own**	The User can pass a string to GoPasswordCreator and those characters in the string will be included
+- **all**	Equivalent to 'alphanum special'
+- **alphanum**  Equivalent to 'lower upper numbers'
+- **lower**	Use lower-case letters
+- **upper**	Use upper-case letters
+- **numbers**	Use digits
+- **special**	Use special characters (like '-')
+- **own**	Takes a custom string that contains characters to use
 
 
 Options
 =======
 
-- **-length** 	Specifies the length of the generated password. Default is set to 8
-- **-count**	User can specify how many passwords should be generated at the same time. Default is set to 1
-- **-file**	If file is set, the passwords will be written into this file rather than printed out on stdout
+- **-length** 	Specifies the length of the generated password. Default is 8.
+- **-count**	Specifies how many passwords to generate. Default is 1.
+- **-file**	Write passwords to the named file instead of standard output.
 
 
 Examples
@@ -43,7 +43,7 @@ Examples
 This generates passwords that could contain lower-case letters, upper-case letters, and numbers.
 
 	GoPasswordCreator alphanum
-This generates passwords that could contain lower-case letters, upper-case letters, and numbers.  This is  just a short hand for the previous command.
+This generates passwords that could contain lower-case letters, upper-case letters, and numbers.  This is just a short hand for the previous command.
 
 	GoPasswordCreator lower own="?="
 This generates passwords that could contain lower-case letters and the two characters "?" and "=".
