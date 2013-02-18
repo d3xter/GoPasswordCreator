@@ -52,4 +52,4 @@ This generates passwords that could contain lower-case letters and the two chara
 This generates passwords that could contain any characters except for lower-case letters.
 
 	GoPasswordCreator -length 8 -count 5 -file passwords.txt all
-5 Passwords with 8 characters per password will be written into /home/d3xter/passwords.txt
+5 Passwords with 8 characters per password will be written into passwords.txt.
