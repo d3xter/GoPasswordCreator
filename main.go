@@ -55,6 +55,22 @@ Options:
 	flag.PrintDefaults()
 }
 
+// Sets a list of bool variables to the same value. If len(args) == 1, use true.
+// Otherwise, parse args[1] as a bool and use that.
+func setBool(args []string, vars ...*bool) {
+	on := true
+	if len(args) > 1 {
+		var err error
+		on, err = strconv.ParseBool(args[1])
+		if err != nil {
+			printError(err)
+		}
+	}
+	for _, bp := range vars {
+		*bp = on
+	}
+}
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()
@@ -65,44 +81,31 @@ func main() {
 		parsed := strings.SplitN(arg, "=", 2)
 
 		// Group arguments by the data type of their value
-		if parsed[0] == "own" {
+		switch parsed[0] {
+		case "own":
 			// Need a string value
 			if len(parsed) == 2 {
 				usersCharacters = parsed[1]
 			} else {
 				printError(fmt.Errorf("'own' requires a '=' to specify characters"))
 			}
-		} else {
+
 			// All other arguments take boolean values
-			on := true
-			if len(parsed) == 2 {
-				var err error
-				on, err = strconv.ParseBool(parsed[1])
-				if err != nil {
-					printError(err)
-				}
-			}
-			switch parsed[0] {
-			case "all":
-				lowerCase = on
-				upperCase = on
-				numerals = on
-				specialCharacters = on
-			case "alphanum":
-				lowerCase = on
-				upperCase = on
-				numerals = on
-			case "lower":
-				lowerCase = on
-			case "upper":
-				upperCase = on
-			case "numbers":
-				numerals = on
-			case "special":
-				specialCharacters = on
-			default:
-				printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
-			}
+		case "all":
+			setBool(parsed, &lowerCase, &upperCase, &numerals, &specialCharacters)
+		case "alphanum":
+			setBool(parsed, &lowerCase, &upperCase, &numerals)
+		case "lower":
+			setBool(parsed, &lowerCase)
+		case "upper":
+			setBool(parsed, &upperCase)
+		case "numbers":
+			setBool(parsed, &numerals)
+		case "special":
+			setBool(parsed, &specialCharacters)
+
+		default:
+			printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
 		}
 	}
 
