@@ -27,6 +27,8 @@ At least one of these arguments must be passed to GoPasswordCreator to specify w
 - **special**	Use special characters (like '-')
 - **own**	Takes a custom string that contains characters to use
 
+'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
+
 
 Options
 =======
