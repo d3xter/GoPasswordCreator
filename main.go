@@ -135,6 +135,7 @@ func main() {
 	}
 }
 
+// Prints err.Error() to Stdout.
 func printError(err error) {
 	fmt.Fprintln(os.Stderr, "Error: "+err.Error())
 }
