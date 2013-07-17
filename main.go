@@ -64,6 +64,7 @@ func setBool(args []string, vars ...*bool) {
 		on, err = strconv.ParseBool(args[1])
 		if err != nil {
 			printError(err)
+			os.Exit(1)
 		}
 	}
 	for _, bp := range vars {
