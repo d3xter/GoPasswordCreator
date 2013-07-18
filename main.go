@@ -9,45 +9,105 @@ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
 */
 
-
 package main
 
 import (
-	"fmt"
 	"flag"
+	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 var (
 	passwordLength = flag.Int("length", 8, "Length of the generated Password")
 
-	//Define all available flags, which are used to specify, which characters to use to generate the password
-	lowerCase         = flag.Bool("lower", false, "Should LowerCase characters be included?")
-	upperCase         = flag.Bool("upper", false, "Should UpperCase characters be included?")
-	numerals          = flag.Bool("numbers", false, "Should the Numbers be included?")
-	specialCharacters = flag.Bool("special", false, "Should special characters be included?")
-	usersCharacters   = flag.String("own", "", "Characters defined by the user, which will be also be used to generate the password")
+	// Variables that define what characters to use in the password
+	lowerCase         bool
+	upperCase         bool
+	numerals          bool
+	specialCharacters bool
+	usersCharacters   string
 
-	//If --all Flag is set, then lower/upper-case letters, numbers and special characters and by user defined characters are used
-	allGroups = flag.Bool("all", false, "Use lower/upper-case letters, numbers, special characters and by user defined characters to generate the password")
+	passwordCount = flag.Int("count", 1, "Determine how many passwords to create")
 
-	//The user can determine, how many passwords will be created
-	passwordCount = flag.Int("count", 1, "Determine, how many passwords will be created")
-
-	//The user can define a file, where the passwords will be written into
-	//If file is omitted, then it will print the passwords on Stdout
-	file = flag.String("file", "", "The File, where the passwords should be written into")
+	file = flag.String("file", "", "Write passwords to the named file instead of standard output")
 )
 
+func usage() {
+	command := os.Args[0]
+	fmt.Fprintf(os.Stderr,
+		`Usage: %s [all] [alphanum] [lower] [upper] [numbers] [special] [own=CHARACTERS]
+%s requires at least one of the following subcommands to specify what characters
+may be used in the password:
+  all: Equivalent to 'alphanum special'
+  alphanum: Equivalent to 'lower upper numbers'
+  lower: Use lower-case letters
+  upper: Use upper-case letters
+  numbers: Use digits
+  special: Use special characters
+  own: Specifies a custom set of characters to use
+'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by
+'=f' to nullify that character set.
+Options:
+`,
+		command, command)
+	flag.PrintDefaults()
+}
+
+// Sets a list of bool variables to the same value. If len(args) == 1, use true.
+// Otherwise, parse args[1] as a bool and use that.
+func setBool(args []string, vars ...*bool) {
+	on := true
+	if len(args) > 1 {
+		var err error
+		on, err = strconv.ParseBool(args[1])
+		if err != nil {
+			printError(err)
+			os.Exit(1)
+		}
+	}
+	for _, bp := range vars {
+		*bp = on
+	}
+}
 
 func main() {
+	flag.Usage = usage
 	flag.Parse()
 
-	if *allGroups {
-		*lowerCase = true
-		*upperCase = true
-		*numerals = true
-		*specialCharacters = true
+	for _, arg := range flag.Args() {
+
+		// Separate the subcommand from the value
+		parsed := strings.SplitN(arg, "=", 2)
+
+		// Group arguments by the data type of their value
+		switch parsed[0] {
+		case "own":
+			// Need a string value
+			if len(parsed) == 2 {
+				usersCharacters = parsed[1]
+			} else {
+				printError(fmt.Errorf("'own' requires a '=' to specify characters"))
+			}
+
+			// All other arguments take boolean values
+		case "all":
+			setBool(parsed, &lowerCase, &upperCase, &numerals, &specialCharacters)
+		case "alphanum":
+			setBool(parsed, &lowerCase, &upperCase, &numerals)
+		case "lower":
+			setBool(parsed, &lowerCase)
+		case "upper":
+			setBool(parsed, &upperCase)
+		case "numbers":
+			setBool(parsed, &numerals)
+		case "special":
+			setBool(parsed, &specialCharacters)
+
+		default:
+			printError(fmt.Errorf("Invalid argument: %s", parsed[0]))
+		}
 	}
 
 	var output *os.File
@@ -62,7 +122,7 @@ func main() {
 		output = os.Stdout
 	}
 
-	creator, err := NewCreator(output, *lowerCase, *upperCase, *numerals, *specialCharacters, *usersCharacters)
+	creator, err := NewCreator(output, lowerCase, upperCase, numerals, specialCharacters, usersCharacters)
 	defer output.Close()
 
 	if err != nil {
@@ -70,12 +130,13 @@ func main() {
 	} else {
 		writeErr := creator.WritePasswords(*passwordLength, *passwordCount)
 
-		if writeErr != nil  {
+		if writeErr != nil {
 			printError(writeErr)
 		}
 	}
 }
 
+// Prints err.Error() to Stdout.
 func printError(err error) {
-	fmt.Println("Error: " + err.Error())
+	fmt.Fprintln(os.Stderr, "Error: "+err.Error())
 }

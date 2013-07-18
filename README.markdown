@@ -2,45 +2,56 @@ GoPasswordCreator
 =================
 
 This program is used for generating passwords.
-The user can choose, which character-group will be used to generate the password.
-For example: lower case letters, numbers and so on.
-It is also possible for the user to define his/her own set of characters, which will be used to create the password.
+The user can choose which character-group will be used to generate the password.
+For example: lower case letters, numbers, and so on.
+It is also possible for the user to define his/her own set of characters which will be used to create the password.
 
 
 Compilation
 ===========
 
-The easiest way to compile the Password-Creator is, just to use the new "go" tool and run "go build" 
+The easiest way to compile the Password-Creator is just to use the new "go" tool and run "go build",
 and it will generate a binary called "GoPasswordCreator"
 
 
 Arguments
 =========
 
-There are several arguments, which can be passed to the Password-Creator:
+At least one of these arguments must be passed to GoPasswordCreator to specify what characters may be used in the password:
 
-- **--all**	When this Flag is set, lower/upper-case letters, numbers, special characters and by user defined characters are used to generate the password
-- **--lower**	Lower-Case Letters will be included
-- **--upper**	Upper-Case Letters will be included
-- **--numbers**	Numbers will be included
-- **--special**	Special Letters (like "-") will be included
-- **--own**	The User can pass a string to the Password-Creator and those characters in the string will be included
-- **--length** 	Specifies the length of the generated password. Default is set to 8
-- **--count**	User can specify with --count, how many passwords should be generated at the same. Default is set to 1
-- **--file**	If file is set, the passwords will be written into this file, rather than printed out on stdout
+- **all**	Equivalent to 'alphanum special'
+- **alphanum**  Equivalent to 'lower upper numbers'
+- **lower**	Use lower-case letters
+- **upper**	Use upper-case letters
+- **numbers**	Use digits
+- **special**	Use special characters (like '-')
+- **own**	Takes a custom string that contains characters to use
+
+'all', 'alphanum', 'lower', 'upper', 'numbers', and 'special' may be followed by '=f' to nullify that character set.
+
+
+Options
+=======
+
+- **-length** 	Specifies the length of the generated password. Default is 8.
+- **-count**	Specifies how many passwords to generate. Default is 1.
+- **-file**	Write passwords to the named file instead of standard output.
 
 
 Examples
 ========
 
-	password_creator --lower --upper --numbers
-This Password could contain lower-case letters, upper-case letters and numbers
+	GoPasswordCreator lower upper numbers
+This generates passwords that could contain lower-case letters, upper-case letters, and numbers.
 
-	password_creator --lower --own "?="
-This password could contain lower-case letters and those two characters ("?" and "="), which the user has passed to the Password-Creator
+	GoPasswordCreator alphanum
+This generates passwords that could contain lower-case letters, upper-case letters, and numbers.  This is just a short hand for the previous command.
 
-	password_creator --lower=false --upper=true
-This password could contain upper-case letters. Lower-case letters will not be used to generate the password
+	GoPasswordCreator lower own="?="
+This generates passwords that could contain lower-case letters and the two characters "?" and "=".
 
-	password_creator --all --length 8 --count 5 --file /home/d3xter/passwords.txt
-5 Passwords with 8 characters per password will be written into /home/d3xter/passwords.txt
+	GoPasswordCreator all lower=f
+This generates passwords that could contain any characters except for lower-case letters.
+
+	GoPasswordCreator -length 8 -count 5 -file passwords.txt all
+5 Passwords with 8 characters per password will be written into passwords.txt.

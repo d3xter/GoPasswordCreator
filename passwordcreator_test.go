@@ -1,8 +1,8 @@
 package main
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestDigitsCharset(t *testing.T) {
@@ -19,7 +19,7 @@ func TestSomeChars(t *testing.T) {
 
 	testCharacters := "abcdefghijklmnopqrstuvwxyz0123456789,.-_"
 
-	if err != nil || c.characters !=  testCharacters {
+	if err != nil || c.characters != testCharacters {
 		t.Errorf("Characters not distinct.\nExpected \"%s\", but got \"%s\"", testCharacters, c.characters)
 	}
 }
