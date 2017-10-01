@@ -23,3 +23,15 @@ func TestSomeChars(t *testing.T) {
 		t.Errorf("Characters not distinct.\nExpected \"%s\", but got \"%s\"", testCharacters, c.characters)
 	}
 }
+
+func TestUniqueChars(t *testing.T) {
+	expected := "ab"
+	if c, err := NewCreator(
+		os.Stdout, false, false, false, false, "aaabbb",
+	); c.characters != expected || err != nil {
+		t.Errorf(
+			"Characters not distinct.\nExpected \"%s\", but got \"%s\"",
+			expected, c.characters,
+		)
+	}
+}

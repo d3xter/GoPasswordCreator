@@ -55,6 +55,18 @@ func NewCreator(file *os.File, lowerCase, upperCase, numerals, specialCharacters
 
 	characters += userCharacters
 
+	i := 0
+	seen := map[byte]struct{}{}
+	for i < len(characters) {
+		char := characters[i]
+		if _, ok := seen[char]; ok {
+			characters = characters[:i] + characters[i+1:]
+		} else {
+			i++
+			seen[char] = struct{}{}
+		}
+	}
+
 	if len(characters) <= 1 {
 		err = errors.New("Not enough Characters specified to generate passwords")
 		return nil, err
