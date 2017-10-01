@@ -12,9 +12,9 @@ You should have received a copy of the GNU General Public License along with thi
 package main
 
 import (
-	"bytes"
 	"crypto/rand"
 	"errors"
+	"math/big"
 	"os"
 	"strings"
 )
@@ -63,25 +63,19 @@ func NewCreator(file *os.File, lowerCase, upperCase, numerals, specialCharacters
 	return &Creator{characters, file}, err
 }
 
-func (creator *Creator) CreatePassword(length int) (password []byte, err error) {
-	passwordBuffer := new(bytes.Buffer)
+func (creator *Creator) CreatePassword(length int) ([]byte, error) {
+	password := make([]byte, length)
 
-	//Create a byte-array and fill it with random bytes
-	randbytes := make([]byte, length)
-	if _, err := rand.Read(randbytes); err == nil {
-
-		for j := 0; j < length; j++ {
-			tmpindex := int(randbytes[j]) % len(creator.characters)
-			char := creator.characters[tmpindex]
-
-			//Append the character at the end of the password
-			passwordBuffer.WriteString(string(char))
+	for i := 0; i < length; i++ {
+		index, err := rand.Int(rand.Reader, big.NewInt(int64(len(creator.characters))))
+		if err != nil {
+			return nil, err
 		}
 
-		return passwordBuffer.Bytes(), nil
+		password[i] = creator.characters[index.Int64()]
 	}
 
-	return nil, err
+	return password, nil
 }
 
 func (creator *Creator) WritePasswords(length, count int) error {
