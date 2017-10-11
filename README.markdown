@@ -1,3 +1,10 @@
+Important!
+=========
+
+This repository is abandoned. 
+The current development is happening in https://github.com/luther9/GoPasswordCreator.
+
+
 GoPasswordCreator
 =================
 
